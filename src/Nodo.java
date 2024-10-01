@@ -1,8 +1,8 @@
 import java.util.ArrayList;
 
 /**
- * Implementacion de Nodo para tipos genericos, se espera que la super-estructura que
- * los utilice 
+ * Implementacion de Nodo para tipos genericos, se espera que la super-estructura
+ * que los utilice .
  */
 public class Nodo<T> {
     
@@ -14,8 +14,8 @@ public class Nodo<T> {
 
     /**
      * Constructor por defecto
-     * @param valor - {@code T} Es una implementacion generica de Nodos, se espera que
-     *                 se utilicen nodos de un mismo tipo en la estructura que les use.
+     * @param valor - {@code T} Es una implementacion generica de Nodos, se espera
+     *         que se utilicen nodos de un mismo tipo en la estructura que les use.
      */
     public Nodo( T valor ){
         this.valor = valor;
@@ -23,7 +23,7 @@ public class Nodo<T> {
     }
 
     /**
-     * Setter para modificar el valor almacenado internamente (en caso que se requiera)
+     * Setter para modificar el valor almacenado internamente
      * @param valor - {@code Tipo} El nuevo valor a almacenar dentro del Nodo.
      */
     public void setValor( T valor) {
