@@ -1,12 +1,10 @@
-
 /**
  * Implementacion de Treaps
  */
 public class Treap {
     
     protected class NodoTreap extends Nodo<Integer>{
-
-        /** Clave unica asignada al Nodo Treap */
+        
         /** Prioridad asignada al Nodo Treap */
         private float prioridad = 0.0f;
 
