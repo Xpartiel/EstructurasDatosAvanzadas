@@ -1,20 +1,38 @@
 /**
- * Implementacion de Treaps
+ * Implementacion de Treaps - Hecha con Java8
  */
+import java.util.Random;
+
 public class Treap {
+
+    /**  */
+    private Random generador;
+
+    /** {@link NodoTreap} a la raiz del {@link Treap} */
+    private NodoTreap raiz = null;
+
+    /** Contador absoluto de elementos en la estructura {@link Treap} */
+    private int size = 0;
     
+    /**
+     * Implementacion especifica para {@link Nodo} en la estructura de {@link Treap}
+     */
     protected class NodoTreap extends Nodo<Integer>{
         
         /** Prioridad asignada al Nodo Treap */
-        private float prioridad = 0.0f;
+        private float prioridad;
+
+        /** Cantidad de nodos "debajo" del actual */
+        private int descendientes;
 
         /**
          * Constructor que asigna como valor almacenado la clave indicada
          * @param clave - {@code int} valor de key unico asignado al nodo
          */
         public NodoTreap( int clave ){
-            super( new Integer(clave) );
-            this.prioridad = 0.0f;
+            super( new Integer(clave) , 3 );
+            this.prioridad = generador.nextFloat();
+            this.descendientes = 0;
         }
 
         /**
@@ -24,9 +42,118 @@ public class Treap {
          *                  para el ordenamiento
          */
         public NodoTreap( int clave , float prioridad ){
-            super( new Integer(clave) );
+            super( new Integer(clave) , 3 );
             this.prioridad = prioridad;
+            this.descendientes = 0;
+        }
+
+        public int getDescendientes(){
+            return this.descendientes;
+        }
+
+        /** Getter para el padre del nodo */
+        public NodoTreap getPadre(){
+            return (NodoTreap) this.getReferencias().get(0);
+        }
+
+        /** Setter para el padre del nodo */
+        public void setPadre( NodoTreap n ){
+            this.setReferencia( 0 , n );
+        }
+
+        /** Getter del hijo izquierdo del nodo
+         * Aprovechando la implementacion del nodo, se asume siempre que el nodo
+         * en la posicion {@code 1} sera el hijo izquierdo, puede adquirir el valor
+         * {@code null} si no posee hijo izquierdo.
+         */
+        public NodoTreap getHijoIzquierdo(){
+            if( this.getReferencias().size()<1 ){
+                return null;
+            }
+            return (NodoTreap) this.getReferencias().get(1) ;
+        }
+
+        /**
+         * Setter del hijo izquierdo del nodo.
+         * @param n - El {@link NodoTreap} que sera referenciado como hijo derecho
+         * en la posicion {@code 1} del {@link ArrayList} interno.
+         */
+        public void setHijoIzquierdo( NodoTreap n ){
+            this.setReferencia( 1 , n);
+            this.descendientes += ( 1 + n.getDescendientes());
+        }
+
+        /** Getter del hijo derecho del nodo.
+         * Aprovechando la implementacion del nodo, se asume siempre que el nodo
+         * en la posicion {@code 2} sera el hijo derecho, puede adquirir el valor
+         * {@code null} si no posee hijo derecho.
+         */
+        public NodoTreap getHijoDerecho(){
+            return (NodoTreap) this.getReferencias().get(2) ;
+        }
+
+        /**
+         * Setter del hijo derecho del nodo.
+         * @param n - El {@link NodoTreap} que sera referenciado como hijo derecho
+         * en la posicion {@code 2} del {@link ArrayList} interno.
+         */
+        public void setHijoDerecho( NodoTreap n ){
+            this.setReferencia( 2 , n );
+            this.descendientes += ( 1 + n.getDescendientes());
+        }
+
+        public boolean conHijos(){
+            return this.getHijoIzquierdo()!= null || this.getHijoDerecho()!=null;
         }
     }
 
+    public Treap(){ }
+
+    /**
+     * Constructor que inicializa con un unico elemento
+     * @param valor
+     */
+    public Treap( int valor ){
+        this.raiz = new NodoTreap(valor);
+    }
+
+    /**
+     * Solo obtener el nodo a la raiz del {@link Treap}
+     */
+    public NodoTreap peek(){
+        return this.raiz;
+    }
+
+    /**
+     * Metodo con que se busca el {@link NodoTreap} que contiene el valor indicado, partiendo
+     * desde la raiz.
+     * @param val - El valor que se utiliza para buscar el nodo correspondiente en el {@link Treap}
+     * @return
+     * <ul>
+     * <li>{@link NodoTreap} dentro de la estructura que contiene el valor indicado</li>
+     * <li>{@code null} Si no el valor no se encuentra en la estructura</li>
+     * </ul>
+     */
+    public NodoTreap getValor( int valor ){
+
+        NodoTreap iterando = this.raiz;
+        int valorActual;
+
+        while ( iterando!=null && !(iterando.getValor().intValue() == valor) ) {
+            valorActual = iterando.getValor().intValue();
+            if( valor < valorActual ){
+                iterando = iterando.getHijoIzquierdo();
+            }else if( valorActual < valor ){
+                iterando = iterando.getHijoDerecho();
+            }
+        }
+        // Si es o no encontrado, ambas posibilidades estan cubiertas
+        // por el paro del while.
+        return iterando;
+    }
+
+
+    public NodoTreap getIndex( int indice ){
+        return null;
+    }
 }
