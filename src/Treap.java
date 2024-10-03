@@ -52,6 +52,10 @@ public class Treap {
             return this.descendientes;
         }
 
+        public void setDescendientes( int nuevo ){
+            this.descendientes = nuevo;
+        }
+
         /** Getter para el padre del nodo */
         public NodoTreap getPadre(){
             return (NodoTreap) this.getReferencias().get(0);
@@ -82,6 +86,8 @@ public class Treap {
         public void setHijoIzquierdo( NodoTreap n ){
             this.setReferencia( 1 , n);
             this.descendientes += ( 1 + n.getDescendientes());
+
+            n.setPadre(this);
         }
 
         /** Getter del hijo derecho del nodo.
@@ -101,6 +107,38 @@ public class Treap {
         public void setHijoDerecho( NodoTreap n ){
             this.setReferencia( 2 , n );
             this.descendientes += ( 1 + n.getDescendientes());
+
+            n.setPadre(this);
+        }
+
+        /**
+         * Implementacion de rotaciones para {@link NodoTreap}
+         */
+        public void rotar( String modo ){
+            char eleccion = modo.toLowerCase().charAt(0);
+            switch ( eleccion ) {
+                case 'l':
+                case 'i':
+
+                    NodoTreap R = this.getHijoDerecho();// 1 TreapNod* R = root->r;  
+                    NodoTreap X = this.getHijoDerecho().getHijoIzquierdo();// 2 TreapNod* X = root->r->l;  
+
+                    R.setHijoIzquierdo( this ); // 3 R->l = root;
+                    this.setHijoDerecho(X); // 4 root->r= X;
+                    break;
+                
+                case 'r':
+                case 'd':
+                    NodoTreap L = this.getHijoIzquierdo();
+                    NodoTreap Y = this.getHijoIzquierdo().getHijoDerecho();
+
+                    L.setHijoDerecho( this );
+                    this.setHijoIzquierdo(Y);
+                    break;
+
+                default:
+                    break;
+            }
         }
     }
 
@@ -122,11 +160,70 @@ public class Treap {
         this.size = 1;
     }
 
+    public int size(){
+        return this.size;
+    }
+
+    public void insertValue( int valor ){
+        this.insertValue( valor , generador.nextFloat() );
+    }
+
     /**
-     * Solo obtener el nodo a la raiz del {@link Treap}
+     * Metodo con que se inserta al a estructura un nuevo Nodo con el valor
+     * y prioridad indicados, usando la estrategia tipica de un Binary Search
+     * Tree; posterior a la insercion, se relaizan rotaciones si es que son
+     * necesaras.
+     * @param valor - {@code int} el valor asignado al {@link NodoTreap}
+     *                  a insertar, necesario para la insercion BST.
+     * @param prioridad - {@code float} el valor de prioridad asignado al
+     *                  {@link NodoTreap} a insertar, necesario para las
+     *                  rotaciones
      */
-    public NodoTreap peek(){
-        return this.raiz;
+    public void insertValue( int valor , float prioridad ){
+
+        NodoTreap nuevo = new NodoTreap( valor , prioridad );
+        
+        if( this.size() < 1 ){
+            this.raiz = nuevo;
+            this.size += 1;
+            return;
+        }
+
+        NodoTreap iterando = this.raiz;
+        int val = 0;
+
+        // Insercion como en BST
+        while ( iterando!=null ) {
+
+            val = iterando.getValor().intValue();
+            
+            if( val < valor ){
+                if( iterando.getHijoDerecho() != null ){
+                    iterando = iterando.getHijoDerecho();
+                }else{
+                    iterando.setHijoDerecho( nuevo );
+                    break;
+                }
+            }else if( valor < val ){
+                if( iterando.getHijoIzquierdo() != null ){
+                    iterando = iterando.getHijoIzquierdo();
+                }else{
+                    iterando.setHijoIzquierdo(nuevo);
+                    break;
+                }
+            }
+        }
+
+        // Ya que se ha insertado al fondo del arbol, se realizan
+        // las rotaciones que sean necesarias
+        if( true ){
+
+        }
+    }
+
+    //TODO
+    public boolean deleteValue( int valor ){
+        return false;
     }
 
     /**
@@ -141,7 +238,7 @@ public class Treap {
      * <li>{@code null} Si no el valor no se encuentra en la estructura</li>
      * </ul>
      */
-    public NodoTreap getValor( int valor ){
+    public NodoTreap getValue( int valor ){
 
         NodoTreap iterando = this.raiz;
         int valorActual;
@@ -169,6 +266,17 @@ public class Treap {
      * </ul>
      */
     public NodoTreap getIndex( int indice ){
+        return null;
+    }
+
+    /**
+     * Solo obtener el nodo a la raiz del {@link Treap}
+     */
+    public NodoTreap peek(){
+        return this.raiz;
+    }
+
+    public NodoTreap pop(){
         return null;
     }
 }
