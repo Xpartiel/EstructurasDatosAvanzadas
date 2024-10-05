@@ -40,5 +40,9 @@ para esto, asumo que los padres de los nodos nl siempre son nodos4, sin embargo 
 En este analisis visual, el circulo izquierdo corresponde a la cantidad de nodos ni en ese nivel, mientras que el circulo derecho representa la cantidad de nodos nl total que se obtendria de maximizar en ese punto los nodos nl, finalmente, el cuadrado representa la cantidad total de nodos ni acumulados en el arbol, de modo que se puede notar la cantidad de nodos ni y cuantos nodos nl producen con el razonamiento dado.
 [imagen chida aqui]
 
-Del previo analisis, notamos que 
+Del previo analisis, notamos que tomando que todos los nodos ni sean nodos4, maximizamos la cantidad de nodos li, ademas que requerimos de unna proporcion menor de nodos ni que con otras configuraciones.
+
+Entonces, notamos que los nodos nl aumentan en forma de potencias de 4, mientras que los nodos n_i aumentan por capas, es decir, que la cantidad de nodos n_l depende del nivel alcanzado por los nodos n_i.
+Así, conocemos que la cantidad de nodos n_l será de la forma 4^{floor( log4( n_i ) ) + 1 }. 
+
 - Si T' fuese un arbol rojinegro que representa T, ¿Cuántos nodos rojos tendría?

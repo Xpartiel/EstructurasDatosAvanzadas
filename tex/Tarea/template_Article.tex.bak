@@ -1,6 +1,7 @@
 \documentclass[12pt]{article}
 
 \usepackage{graphicx}
+\usepackage{hyperref}
 \graphicspath{ {img/} }
 
 %opening
@@ -120,7 +121,7 @@ con $n_l = 4k + c$  y $0 \leq c < 4$
 		
 		\item ¿Cuál es el máximo valor de $n_i$ como funcion de $n_l$?\\
 		
-Ahora queremos maximizar el valor de $n_l$ en base ni...
+Ahora queremos maximizar el valor de $n_l$ en base $n_i$...
 para esto, asumo que los padres de los nodos $n_l$ siempre son nodos4, sin embargo tengo que analizar como considerar el resto de nodos $n_i$.\\
 En este analisis visual, el circulo izquierdo corresponde a la cantidad de nodos ni en ese nivel, mientras que el circulo derecho representa la cantidad de nodos $n_l$ total que se obtendria de maximizar en ese punto los nodos $n_l$, finalmente, el cuadrado representa la cantidad total de nodos ni acumulados en el arbol, de modo que se puede notar la cantidad de nodos $n_i$ y cuantos nodos $n_l$ producen con el razonamiento dado.
 
@@ -135,6 +136,13 @@ Entonces, notamos que los nodos $nl$ aumentan en forma de potencias de $4$, mien
 Así, conocemos que la cantidad de nodos $n_l$ será de la forma $4^{floor( log4( n_i ) ) + 1 }$.
 		
 		\item Si $T'$  es un \textbf{rojinegro} que representa a $T$, ¿Cuántos nodos rojos tiene $T'$?
+
+Suponiendo que conocemos la cantidad de nodos que son nodo2 , nodo3 y nodo4, podemos usar una guía de conversion similar a la mencionada en clase, donde a cada nodo2, le corresponde convertirse en nodo negro, a cada nodo4, su valor central será negro, mientras que sus laterales seran rojos, y finalmente, los nodo3, serán un nodo rojo y uno negro, por lo que se tendrán:
+$$ 2(n_4) + 1(n_3) $$
+Ideas inspiradas de:\\
+\url{https://stackoverflow.com/questions/35955246/converting-a-2-3-4-tree-into-a-red-black-tree}\\
+\url{https://stackoverflow.com/questions/70251698/converting-2-3-4-to-red-black-tree}
+\url{https://faculty.cs.niu.edu/~freedman/340/340notes/340redblk.htm}
 	\end{enumerate}
 	
 	\item Diseña e implementa un \textbf{Treap} que incluya al menos las siguientes operaciones:
@@ -151,6 +159,10 @@ Así, conocemos que la cantidad de nodos $n_l$ será de la forma $4^{floor( log4
 		
 		\item \textit{pop()}: Elimina y regresa el primer elemento al tope del \textbf{Treap}.
 	\end{itemize}
+	
+	\begin{center}
+		\url{https://github.com/Xpartiel/EstructurasDatosAvanzadas}
+	\end{center}
 
 \end{enumerate}
 
