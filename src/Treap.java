@@ -48,6 +48,24 @@ public class Treap {
             this.descendientes = 0;
         }
 
+        /**
+         * Metodo privado con que se verifica que dos prioridades tengan una diferencia
+         * aceptable, ya que float u double suelen tener problemas con la comparacion
+         * estricta
+         * @param a
+         * @param b
+         * @return
+         */
+        private boolean aprox( float a , float b ){
+            return Math.abs( a-b )<0.1f;
+        }
+
+        @Override
+        public boolean equals( Object otro ){
+            NodoTreap nodoO = (NodoTreap) otro;
+            return super.equals(otro)? this.aprox( this.getPrioridad() , nodoO.getPrioridad() ) : false;
+        }
+
         public int getDescendientes(){
             return this.descendientes;
         }
@@ -111,6 +129,14 @@ public class Treap {
             n.setPadre(this);
         }
 
+        public float getPrioridad() {
+            return prioridad;
+        }
+
+        public void setPrioridad(float prioridad) {
+            this.prioridad = prioridad;
+        }
+
         /**
          * Implementacion de rotaciones para {@link NodoTreap}
          */
@@ -168,6 +194,17 @@ public class Treap {
         this.insertValue( valor , generador.nextFloat() );
     }
 
+    public void heapify( NodoTreap iterando , NodoTreap nuevo ){
+        while( !this.peek().equals(nuevo) && nuevo.getPadre().getPrioridad()<nuevo.getPrioridad() ){
+            iterando = nuevo.getPadre();
+            if( iterando.getHijoDerecho()!=null && iterando.getHijoDerecho().equals( nuevo ) ){
+                iterando.rotar("izquierda");
+            }else if( iterando.getHijoIzquierdo()!=null && iterando.getHijoIzquierdo().equals( nuevo ) ){
+                iterando.rotar("derecha");
+            }
+        }
+    }
+
     /**
      * Metodo con que se inserta al a estructura un nuevo Nodo con el valor
      * y prioridad indicados, usando la estrategia tipica de un Binary Search
@@ -202,6 +239,11 @@ public class Treap {
                     iterando = iterando.getHijoDerecho();
                 }else{
                     iterando.setHijoDerecho( nuevo );
+                    this.size += 1;
+
+                    //Rotar hacia arriba hasta que el padre tenga una prioridad superior, o se haya vuelto
+                    //la raiz del Treap
+                    this.heapify(iterando, nuevo);
                     break;
                 }
             }else if( valor < val ){
@@ -209,21 +251,53 @@ public class Treap {
                     iterando = iterando.getHijoIzquierdo();
                 }else{
                     iterando.setHijoIzquierdo(nuevo);
+                    this.size += 1;
+
+                    // Ya que se ha insertado al fondo del arbol, se realizan las rotaciones que sean necesarias
+                    //if( iterando.getPrioridad() < iterando.getHijoIzquierdo().getPrioridad() ){
+                    //    iterando.rotar("derecha");
+                    //}
+                    this.heapify(iterando, nuevo);
+
                     break;
                 }
             }
-        }
-
-        // Ya que se ha insertado al fondo del arbol, se realizan
-        // las rotaciones que sean necesarias
-        if( true ){
-
         }
     }
 
     //TODO
     public boolean deleteValue( int valor ){
-        return false;
+        // Buscar el nodo dentro de la estructura
+        NodoTreap nodo = this.getValue(valor);
+        // Valor no encontrado
+        if( nodo == null ){
+            return false;
+        }
+        // Rotar el nodo hacia abajo hasta que sea una hoja
+        while (nodo.getHijoIzquierdo() != null || nodo.getHijoDerecho() != null) {
+            if (nodo.getHijoIzquierdo() == null) {
+                nodo.rotar("izquierda");
+            } else if (nodo.getHijoDerecho() == null) {
+                nodo.rotar("derecha");
+            } else if (nodo.getHijoIzquierdo().getPrioridad() < nodo.getHijoDerecho().getPrioridad()) {
+                nodo.rotar("izquierda");
+            } else {
+                nodo.rotar("derecha");
+            }
+        }
+        // Ya que el nodo es hoja, eliminarlo de la raiz
+        NodoTreap padre = nodo.getPadre();
+        if (padre != null) {
+            if (padre.getHijoIzquierdo() == nodo) {
+                padre.setHijoIzquierdo(null);
+            } else {
+                padre.setHijoDerecho(null);
+            }
+        } else {
+            raiz = null;
+        }
+        size--;
+        return true;
     }
 
     /**
@@ -266,7 +340,22 @@ public class Treap {
      * </ul>
      */
     public NodoTreap getIndex( int indice ){
-        return null;
+        return this.getIndexAux( this.raiz , indice );
+    }
+    
+    private NodoTreap getIndexAux(NodoTreap nodo, int indice) {
+        if (nodo == null){
+            return null;
+        }
+        int leftCount = (nodo.getHijoIzquierdo() != null) ? nodo.getHijoIzquierdo().getDescendientes() + 1 : 0;
+    
+        if (indice < leftCount) {
+            return this.getIndexAux(nodo.getHijoIzquierdo(), indice);
+        } else if (indice == leftCount) {
+            return nodo;
+        } else {
+            return this.getIndexAux(nodo.getHijoDerecho(), indice - leftCount - 1);
+        }
     }
 
     /**
@@ -277,6 +366,11 @@ public class Treap {
     }
 
     public NodoTreap pop(){
-        return null;
+        if( this.raiz==null ){
+            return null;
+        }
+        NodoTreap resultado = this.raiz;
+        this.deleteValue( this.raiz.getValor() );
+        return resultado;
     }
 }

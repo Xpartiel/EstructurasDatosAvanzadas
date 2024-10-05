@@ -36,6 +36,19 @@ public class Nodo<T> {
         }
     }
 
+    @Override
+    /** Con esta implementacion de equals, solo se verifica el contenido del nodo; no se  */
+    public boolean equals(Object otro){
+        if(otro == null || otro.getClass()!= this.getClass() ){
+            return false;
+        }
+        if( otro == this ){
+            return true;
+        }
+        Nodo<T> nodoO = (Nodo<T>) otro;
+        return nodoO.getValor().equals( this.getValor() );
+    }
+
     /**
      * Setter para modificar el valor almacenado internamente
      * @param valor - {@code Tipo} El nuevo valor a almacenar dentro del Nodo.
