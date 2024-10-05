@@ -27,10 +27,18 @@ Esto es falso, debido a que el arbol AVL tiene una "tolerancia" de diferencia de
 Ya que se estan considerando la menor cantidad de nodos n_i, se asume que, si no todos, la mayoría dominante de estos serán nodos-4 (ya que de no ser así, se requieren mas nodos como padres de los nodos n_l, lo que resultaría en un aumento mas notable de nodos), entonces, suponiento que se tienen 4k + c nodos n_l, con 0 <= c < 4, se tendrán a lo más k+1 nodos padres de n_l, luego, en nuestro afan de ahorrar nodos, supondré que se siguen usando nodos 4 en n_i, así, notamos que se van reduciendo los nodos padre en razon de 4, lo cual nos recomienda el comportamiento logaritmico observado en los arboles binarios ya estudiados previamente.
 
 Entonces, si se tienen 64 hojas, hay 16 padres de estos, que a su vez tienen 4 padres, que a su vez tienen 1 padre (raiz), lo que corresponde a que, si se tienen 64 n_l, se tienen 16 + 4 + 1 => 4^3 nl dan 4^2 + 4^1 + 4^0 ni
-Así, si tengo 4k+c = nl => Sigma_{x=0}^{log4 4k+c-1} 4^x = ni
-con lo que tengo que ni = 4^log4 4k+c-1 +1 -1/ 4 - 1 = 4(4k+c) -1 / 3
+Así, si tengo 4k+c = nl => Sigma_{x=0}^{log4 (4k+c) -1} 4^x = ni
+con lo que tengo que ni = 4^{log4(4k+c)-1+1} -1/4 - 1 = (4k+c) -1 / 3
 
-nl = 64 => k=16 , c=0 => ni = 4(4*16 + 0)-1/3 = 16 * 16 -1/3 = 256 -1/3 = 255/3 = 85
+nl = 64 => k=16 , c=0 => ni = (4*16 + 0)-1/3 = 64 -1/3 = 63/3 = 21
+Lo que concuerda con el valor esperado, por lo que concluyo que
+n_i = (4k + c)-1/3, con n_l = 4k + c & 0<= c <4 
 
 - ¿Cuál es el maximo valor de n_l, como funcion de n_i?
+Ahora queremos maximizar el valor de nl en base ni...
+para esto, asumo que los padres de los nodos nl siempre son nodos4, sin embargo tengo que analizar como considerar el resto de nodos ni.
+En este analisis visual, el circulo izquierdo corresponde a la cantidad de nodos ni en ese nivel, mientras que el circulo derecho representa la cantidad de nodos nl total que se obtendria de maximizar en ese punto los nodos nl, finalmente, el cuadrado representa la cantidad total de nodos ni acumulados en el arbol, de modo que se puede notar la cantidad de nodos ni y cuantos nodos nl producen con el razonamiento dado.
+[imagen chida aqui]
+
+Del previo analisis, notamos que 
 - Si T' fuese un arbol rojinegro que representa T, ¿Cuántos nodos rojos tendría?
